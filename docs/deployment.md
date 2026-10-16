@@ -10,7 +10,7 @@ Projekt jest statyczny: `npm ci && npm run build`, katalog wynikowy `dist`. Dome
 4. Krok `domain` przypnie `atlas.kawka.pro` do Pages, a potem doda CNAME do rzeczywistej domeny projektu `*.pages.dev`. Istniejący konflikt DNS przerywa operację; skrypt nie nadpisuje rekordów. Aktywacja domeny i TLS może potrwać.
 5. Sprawdź HTTPS, `/pl/`, `/en/`, `/data/observations.csv`, `sitemap-index.xml` oraz nagłówki z `_headers`. Sam poprawny build nie potwierdza wdrożenia.
 
-Gdy token nie jest ustawiony, build i artifact działają, a wszystkie kroki wdrożenia są pomijane. Kod przygotowania Pages sprawdzono składniowo i względem oficjalnego API, ale nie wykonano operacji tworzenia przy obecnym tokenie (HTTP 403).
+Gdy token nie jest ustawiony, build i artifact działają, a wszystkie kroki wdrożenia są pomijane. Pierwsze pełne wdrożenie przez ten workflow zakończyło się sukcesem 17 października 2026 (Europe/Warsaw).
 
 Rollback: wybierz poprzedni deployment w Pages. Dane i kod można odtworzyć z odpowiadającego commita Git.
 
@@ -18,6 +18,12 @@ Rollback: wybierz poprzedni deployment w Pages. Dane i kod można odtworzyć z o
 
 Workflow `Refresh official data` publikuje osobną gałąź `automation/data-refresh-<run_id>` i link do porównania z main. Użytkownik może z tego linku otworzyć PR. Bot nie ma uprawnienia do zatwierdzania PR; ustawienie repozytorium pozostało wyłączone. Zmiany wymagają przeglądu przed merge. Tygodniowy cron to 05:23 UTC w poniedziałki.
 
-## Stan przy pierwszym przygotowaniu
+## Zweryfikowane wdrożenie — 17 października 2026
 
-Dostępny lokalny token Cloudflare pozwala odczytać strefę i DNS, lecz żądanie listy projektów Pages zwróciło HTTP 403. Nie utworzono rekordu DNS wskazującego na nieistniejący deployment. Do zakończenia publikacji konieczny jest token z uprawnieniem Pages Edit, zapisany lokalnie w SOPS lub bezpośrednio jako sekret GitHub.
+- Publiczna domena: https://atlas.kawka.pro (przekierowanie do `/pl/`), także `/en/`.
+- Projekt Pages: `global-public-sector-atlas`; adres techniczny `global-public-sector-atlas.pages.dev`.
+- [Workflow produkcyjny zakończony sukcesem](https://github.com/Adkins1/global-public-sector-atlas/actions/runs/38973625817), kod aplikacji z commita `082b846dd66928da2604851387bcac20ca3ed901`.
+- Token dostarczony lokalnie przez SOPS został zapisany jako sekret GitHub bez ujawniania wartości. Wcześniejszy brak uprawnień Pages (HTTP 403) został rozwiązany.
+- Zweryfikowano HTTPS, obie wersje językowe, mapę, rzeczywiste dane Polski, dialog źródłowy, widok mobilny, pobieranie CSV i sitemap.
+- SHA-256 publicznego `data/atlas.json` odpowiada plikowi w repozytorium.
+- Podczas pierwszej aktywacji domena chwilowo zwracała 522; po propagacji konfiguracji działa prawidłowo. W razie przyszłego problemu sprawdź stan domeny w Pages przed zmianą DNS.

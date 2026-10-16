@@ -1,5 +1,7 @@
 # Global Public Sector Atlas
 
+**Wersja online:** [Polski](https://atlas.kawka.pro/pl/) · [English](https://atlas.kawka.pro/en/)
+
 Open-source, dwujęzyczny atlas skali sektora publicznego. Astro + React + TypeScript + Tailwind CSS + Apache ECharts + MapLibre; ETL w Pythonie z Polars i Pydantic.
 
 **MVP korzysta z rzeczywistych danych OECD, World Bank WWBI/WDI i Eurostatu.** Nie utożsamia administracji z całym sektorem publicznym ani własności państwowej z finansowaniem podatkowym. WWBI jest oddzielnym, opisowym widokiem o zmiennym zakresie.
