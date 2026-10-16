@@ -1,0 +1,175 @@
+---
+import Layout from "../../layouts/Layout.astro";
+export function getStaticPaths() {
+  return ["pl", "en"].map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as "pl" | "en";
+const pl = lang === "pl";
+---
+
+<Layout
+  lang={lang}
+  title={`${pl ? "Metodologia" : "Methodology"} · Global Public Sector Atlas`}
+  ><main class="prose">
+    <div class="eyebrow">GLOBAL PUBLIC SECTOR ATLAS / METHODOLOGY</div><h1>
+      {
+        pl
+          ? "Najpierw definicja. Potem porównanie."
+          : "Definitions before comparisons."
+      }
+    </h1>
+    <p>
+      {
+        pl
+          ? "Atlas mierzy zatrudnienie i koszty instytucji publicznych, ale nie utożsamia własności publicznej z finansowaniem wyłącznie z podatków. Dane nie obejmują automatycznie wszystkich pracowników prywatnych podmiotów realizujących zamówienia publiczne."
+          : "The Atlas measures public employment and compensation, without equating public ownership with exclusive tax financing. It does not automatically include employees of private contractors delivering public services."
+      }
+    </p>
+    <h2>{pl ? "Trzy różne zakresy" : "Three different scopes"}</h2><ul>
+      <li>
+        <strong>{pl ? "Administracja" : "Public administration"}</strong> — {
+          pl
+            ? "węższy zakres funkcjonalny lub instytucjonalny. NACE O nie jest całym sektorem publicznym."
+            : "a narrower functional or institutional boundary. NACE O is not the whole public sector."
+        }
+      </li><li>
+        <strong>General government (S.13)</strong> — {
+          pl
+            ? "instytucje rządowe, samorządowe i fundusze zabezpieczenia społecznego; obejmuje publiczne jednostki nierynkowe, np. część szkół i szpitali. Wyłącza przedsiębiorstwa publiczne. To główny zakres porównań OECD."
+            : "central, state and local governments and social security funds, including public non-market units such as some schools and hospitals. Public corporations are excluded. This is the main OECD comparison scope."
+        }
+      </li><li>
+        <strong
+          >{
+            pl
+              ? "Sektor publiczny według badań"
+              : "Survey-defined public sector"
+          }</strong
+        > — {
+          pl
+            ? "może obejmować przedsiębiorstwa państwowe. WWBI harmonizuje badania gospodarstw domowych, ale dokładny zakres różni się między badaniami."
+            : "may include state-owned enterprises. WWBI harmonises household surveys, but exact coverage varies across surveys."
+        }
+      </li>
+    </ul>
+    <h2>{pl ? "Co dokładnie porównujemy" : "What we compare"}</h2><ul>
+      <li>
+        {
+          pl
+            ? "Udział zatrudnionych: liczba osób w S.13 / ogół zatrudnionych, według OECD. Nie mylimy zatrudnionych z samymi pracownikami najemnymi."
+            : "Employment share: S.13 employment / total employment, as reported by OECD. Total employment is different from paid employment."
+        }
+      </li><li>
+        {
+          pl
+            ? "Na 1000 mieszkańców: osoby w OECD S.13 / populacja World Bank SP.POP.TOTL z tego samego roku × 1000. Nie łączymy różnych lat. Zatrudnienie krajowe i populacja rezydentów mają różne granice przy pracy transgranicznej."
+            : "Per 1,000 residents: OECD S.13 persons / World Bank SP.POP.TOTL population in the same year × 1000. Years are never mixed. Domestic employment and resident population differ for cross-border workers."
+        }
+      </li><li>
+        {
+          pl
+            ? "Koszty wynagrodzeń: Eurostat D.1, czyli płace plus składki pracodawcy, jako % PKB. Funkcje COFOG pokazują koszty, nie liczbę etatów."
+            : "Compensation: Eurostat D.1, wages and salaries plus employers’ social contributions, as a percentage of GDP. COFOG functions show costs, not headcounts."
+        }
+      </li><li>
+        {
+          pl
+            ? "WWBI: osobny widok opisowy. Wskaźnik BI.EMP.TOTL.PB obejmuje udział w ogóle zatrudnionych. API zwraca proporcję; mnożymy ją przez 100. Nie łączymy jej z szeregiem OECD."
+            : "WWBI: a separate descriptive view. BI.EMP.TOTL.PB measures the public share of total employment. The API returns a proportion; we multiply it by 100. It is not merged with the OECD series."
+        }
+      </li>
+    </ul>
+    <h2>{pl ? "Ograniczenia WWBI" : "WWBI limitations"}</h2><p>
+      {
+        pl
+          ? "Codebook WWBI 3.1 opisuje wykorzystanie NACE O/P/Q jako przybliżenia sektora publicznego w części danych EU-SILC dla EOG 2004–2018. Takie przybliżenie może obejmować prywatne szkoły i placówki zdrowotne. API nie podaje identyfikatora mikrobadania dla każdej obserwacji. Sama geografia i rok nie wystarczają do pewnego przypisania zakresu."
+          : "WWBI Codebook 3.1 describes the use of NACE O/P/Q as a public-sector proxy in some EU-SILC data for the EEA in 2004–2018. This can include private education and health providers. The API does not identify the underlying survey for each observation. Geography and year alone do not establish exact scope."
+      }
+    </p><p>
+      {
+        pl
+          ? "Dlatego WWBI nie ma rankingu ani mediany międzynarodowej w Atlasie. Mapa i wykresy są opisowe. Porównania międzynarodowe oraz trendy wymagają lektury źródła, a zmiany zakresu mogą powodować przerwy metodologiczne."
+          : "WWBI therefore has no international ranking or median in the Atlas. Its map and charts are descriptive. International comparisons and trends require source review; coverage changes may cause methodological breaks."
+      }
+      <a
+        href="https://datacatalogfiles.worldbank.org/ddh-published/0038132/6/DR0046449/WWBI%20Codebook%20v3.1.pdf"
+        >WWBI Codebook 3.1 (pp. 8–9)</a
+      >.
+    </p>
+    <h2>{pl ? "Zasady rzetelności" : "Integrity rules"}</h2><ul>
+      <li>
+        {
+          pl
+            ? "Mapa, tabela i ranking używają jednego wybranego roku. Nie podstawiamy „ostatniej znanej” wartości za brak."
+            : "The map, table and ranking use one selected year. No last-known value is substituted for a missing observation."
+        }
+      </li><li>
+        {
+          pl
+            ? "Brak to null lub brak obserwacji, nigdy zero. Nie interpolujemy; linie wykresu urywają się przy brakujących latach."
+            : "Missing means null or an absent observation, never zero. No interpolation; chart lines break at missing years."
+        }
+      </li><li>
+        {
+          pl
+            ? "Mediana jest nieważona i dotyczy wyłącznie państw z danymi w danym roku. Nie jest średnią globalną. Agregaty OECD i UE wykluczamy z rankingu."
+            : "The median is unweighted and includes only countries with data in the selected year. It is not a global average. OECD and EU aggregates are excluded from rankings."
+        }
+      </li><li>
+        {
+          pl
+            ? "Nie dodajemy sum do ich składowych, nie sumujemy płci ani przekrojów nakładających się. W Eurostacie wybieramy tylko COFOG poziomu 1."
+            : "Totals are never added to their components; overlapping demographic or sectoral breakdowns are not summed. Eurostat uses only COFOG level 1."
+        }
+      </li><li>
+        {
+          pl
+            ? "Osoby, etaty FTE, liczebność próby, płace brutto, premie skorygowane i ilorazy średnich to różne miary. Nie zamieniamy ich między sobą."
+            : "Persons, FTEs, sample counts, gross wages, adjusted premiums and ratios of means are distinct measures. They are not substituted for one another."
+        }
+      </li><li>
+        {
+          pl
+            ? "Flagi źródłowe pozostają w danych. A w OECD oznacza standardową obserwację; p w Eurostacie oznacza wartość prowizoryczną, e — szacunek, b — przerwę szeregu. Należy sprawdzać słowniki źródła."
+            : "Source flags are preserved. OECD A indicates a normal observation; Eurostat p means provisional, e estimated, and b a break in series. Consult source code lists."
+        }
+      </li>
+    </ul>
+    <h2>
+      {
+        pl
+          ? "Czego MVP jeszcze nie twierdzi"
+          : "What the MVP does not yet claim"
+      }
+    </h2><p>
+      {
+        pl
+          ? "Nie publikujemy zgadywanej relacji średnich płac publicznych do prywatnych. Dostępna w WWBI skorygowana premia płacowa jest wynikiem modelu, a nie ilorazem średnich. Nie pokazujemy fikcyjnego podziału zatrudnienia centralnego, lokalnego, skarbowego, edukacyjnego czy medycznego. Następny etap wymaga weryfikacji ILOSTAT i źródeł krajowych, zakresu instytucji oraz jednostki osoby/FTE."
+          : "We do not publish a guessed public-to-private mean wage ratio. The WWBI adjusted wage premium is a model result, not a ratio of means. No fictional breakdown of central, local, tax, education or health staffing is presented. The next stage requires verification of ILOSTAT and national sources, institutional coverage and persons/FTE units."
+      }
+    </p>
+    <h2>{pl ? "Odtwarzalność i źródła" : "Reproducibility and sources"}</h2><p>
+      {
+        pl
+          ? "Każda wartość ma identyfikator kraju, rok, jednostkę, zakres, definicję, metodę, URL źródła, datę pobrania i SHA-256 surowej odpowiedzi. Wartości obliczone wskazują obserwacje wejściowe. JSON i CSV zawierają te metadane."
+          : "Every value has a country identifier, year, unit, scope, definition, method, source URL, retrieval timestamp and raw-response SHA-256. Derived values identify their inputs. JSON and CSV contain this metadata."
+      }
+    </p><p>
+      <a href={`/${lang}/data/`}
+        >{
+          pl
+            ? "Pobierz dane i surowe odpowiedzi →"
+            : "Download data and raw responses →"
+        }</a>
+    </p><p>
+      <a
+        href="https://www.oecd.org/en/publications/government-at-a-glance-2025_0efd0bcd-en/full-report/employment-in-general-government_dafcfac5.html"
+        >OECD: Employment in general government, methodology and country
+        exceptions</a>
+    </p><p>
+      <a
+        href="https://ec.europa.eu/eurostat/cache/metadata/en/gov_10a_exp_esms.htm"
+        >Eurostat: General government expenditure by function</a>
+    </p>
+  </main></Layout
+>

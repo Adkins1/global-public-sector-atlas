@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.venv/
+__pycache__/
+.pytest_cache/
+.env*
+!.env.example
+.wrangler/
+playwright-report/
+test-results/

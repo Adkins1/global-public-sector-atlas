@@ -1,0 +1,141 @@
+---
+import "../styles/global.css";
+interface Props {
+  lang: "pl" | "en";
+  title?: string;
+  description?: string;
+}
+const {
+  lang,
+  title = "Global Public Sector Atlas",
+  description = lang === "pl"
+    ? "Porównuj zatrudnienie i koszty wynagrodzeń sektora publicznego. Otwarte dane OECD, World Bank i Eurostatu, jawna metodologia i źródła."
+    : "Compare public employment and compensation across countries. Open OECD, World Bank and Eurostat data with transparent methodology and sources.",
+} = Astro.props;
+const t = (pl: string, en: string) => (lang === "pl" ? pl : en);
+const path = Astro.url.pathname.replace(/^\/(pl|en)/, "");
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head
+    ><meta charset="UTF-8" /><meta
+      name="viewport"
+      content="width=device-width"
+    /><title>{title}</title><meta
+      name="description"
+      content={description}
+    /><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link
+      rel="canonical"
+      href={new URL(Astro.url.pathname, Astro.site)}
+    /><link
+      rel="alternate"
+      hreflang="pl"
+      href={new URL("/pl" + path, Astro.site)}
+    /><link
+      rel="alternate"
+      hreflang="en"
+      href={new URL("/en" + path, Astro.site)}
+    /><link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL("/en" + path, Astro.site)}
+    /><meta property="og:title" content={title} /><meta
+      property="og:description"
+      content={description}
+    /><meta property="og:type" content="website" /><meta
+      property="og:url"
+      content={new URL(Astro.url.pathname, Astro.site)}
+    /><meta name="theme-color" content="#1b624c" /><script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Global Public Sector Atlas",
+        url: Astro.site?.href,
+        inLanguage: ["pl", "en"],
+        description,
+      })}
+    /></head
+  ><body
+    ><a class="skip-link" href="#content"
+      >{t("Przejdź do treści", "Skip to content")}</a
+    ><header class="site-header">
+      <div class="wrap header-inner">
+        <a
+          class="brand"
+          href={`/${lang}/`}
+          aria-label="Global Public Sector Atlas"
+          ><svg
+            class="brand-icon"
+            viewBox="0 0 44 44"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.15"
+            aria-hidden="true"
+            ><circle cx="22" cy="22" r="18"></circle><ellipse
+              cx="22"
+              cy="22"
+              rx="9"
+              ry="18"></ellipse><path d="M4 22h36M7 12h30M7 32h30M22 4v36"
+            ></path></svg
+          ><span>GLOBAL PUBLIC SECTOR<span>ATLAS</span></span></a
+        ><nav class="site-nav">
+          <a href={`/${lang}/#explore`}>{t("Eksploruj", "Explore")}</a><a
+            href={`/${lang}/#compare`}>{t("Porównaj", "Compare")}</a
+          ><a href={`/${lang}/methodology/`}
+            >{t("Metodologia", "Methodology")}</a
+          ><a href={`/${lang}/data/`}>{t("Dane i źródła", "Data & sources")}</a>
+        </nav><div class="language-switch">
+          <a
+            class={lang === "pl" ? "current" : ""}
+            href={"/pl" + path}
+            lang="pl">PL</a
+          ><span>/</span><a
+            class={lang === "en" ? "current" : ""}
+            href={"/en" + path}
+            lang="en">EN</a>
+        </div><a
+          class="github-link"
+          href="https://github.com/Adkins1/global-public-sector-atlas"
+          target="_blank"
+          rel="noreferrer">GitHub ↗</a>
+      </div>
+    </header><div id="content"><slot /></div><footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-top">
+          <a class="brand" href={`/${lang}/`}
+            ><span>GLOBAL PUBLIC SECTOR<span>ATLAS</span></span></a
+          ><p>
+            {
+              t(
+                "Otwarty projekt dla świadomej debaty publicznej. Dane potrzebują kontekstu, a obywatele — dostępu do źródeł.",
+                "An open project for informed public debate. Data needs context, and citizens need access to sources.",
+              )
+            }
+          </p><div class="footer-links">
+            <a href={`/${lang}/methodology/`}
+              >{t("Metodologia", "Methodology")}</a
+            ><a href={`/${lang}/data/`}>{t("Pobierz dane", "Download data")}</a
+            ><a href="https://github.com/Adkins1/global-public-sector-atlas"
+              >GitHub ↗</a>
+          </div>
+        </div><div class="footer-bottom">
+          <span
+            >© 2026 Global Public Sector Atlas · {
+              t(
+                "Kod: MIT · Dane: licencje źródeł",
+                "Code: MIT · Data: source licences",
+              )
+            }</span
+          ><span
+            >{
+              t(
+                "Przejrzystość zaczyna się od definicji.",
+                "Transparency begins with definitions.",
+              )
+            }</span>
+        </div>
+      </div>
+    </footer></body>
+</html>

@@ -1,0 +1,136 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import catalog from "../../../public/data/catalog.json";
+export function getStaticPaths() {
+  return ["pl", "en"].map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as "pl" | "en";
+const pl = lang === "pl";
+---
+
+<Layout
+  lang={lang}
+  title={`${pl ? "Dane i źródła" : "Data & sources"} · Global Public Sector Atlas`}
+  ><main class="prose">
+    <div class="eyebrow">OPEN DATA / VERSION 0.1</div><h1>
+      {pl ? "Sprawdź. Pobierz. Wykorzystaj." : "Inspect. Download. Reuse."}
+    </h1><p>
+      {
+        pl
+          ? "Komplet obserwacji z pełnymi metadanymi, w tym jawne braki."
+          : "The complete observation set with full metadata, including explicit missing values."
+      }
+      {catalog.observation_count.toLocaleString(lang)}
+      {pl ? "rekordów;" : "records;"}
+      {catalog.observed_countries}
+      {
+        pl
+          ? "państw z co najmniej jedną obserwacją sektorową w całym szeregu."
+          : "countries with at least one sector observation across all years."
+      }
+    </p><ul>
+      <li>
+        <a href="/data/observations.csv" download
+          >CSV — {pl ? "wartości i metadane" : "values and metadata"}</a>
+      </li><li>
+        <a href="/data/observations.json" download
+          >JSON — {
+            pl
+              ? "pełny zbiór i powiązania obserwacji"
+              : "complete dataset and observation lineage"
+          }</a>
+      </li><li>
+        <a href="/data/catalog.json" download
+          >{
+            pl
+              ? "Katalog źródeł, krajów i licencji"
+              : "Source, country and licence catalogue"
+          } (JSON)</a>
+      </li><li>
+        <a href="/data/provenance.json" download
+          >SHA-256 / {pl ? "daty pobrania" : "retrieval timestamps"}</a>
+      </li><li>
+        <a
+          href="https://github.com/Adkins1/global-public-sector-atlas/tree/main/data/observations"
+          >{
+            pl
+              ? "Repozytorium: kraj → rok → wskaźnik"
+              : "Repository: country → year → indicator"
+          }</a>
+      </li><li>
+        <a
+          href="https://github.com/Adkins1/global-public-sector-atlas/blob/main/data/observation.schema.json"
+          >JSON Schema</a>
+      </li>
+    </ul><h2>{pl ? "Aktywne źródła" : "Active sources"}</h2>{
+      Object.entries(catalog.sources).map(([, s]) => (
+        <section>
+          <>
+            <h3>{s.name}</h3>
+            <p>
+              <a href={s.url}>API ↗</a> ·{" "}
+              <a href={s.documentation}>
+                {pl ? "Metodologia" : "Methodology"} ↗
+              </a>{" "}
+              ·{" "}
+              <a href={"/data/" + s.file} download>
+                {pl ? "Surowa odpowiedź" : "Raw response"}
+              </a>
+            </p>
+            <p>
+              {pl ? "Pobrano" : "Retrieved"}:{" "}
+              {new Date(s.retrieved_at).toLocaleString(lang, {
+                timeZone: "UTC",
+              })}{" "}
+              UTC. {pl ? "Licencja" : "Licence"}:{" "}
+              <a href={s.license_url}>{s.license}</a>.
+            </p>
+          </>
+        </section>
+      ))
+    }<h2>
+      {
+        pl
+          ? "Planowane źródła — jeszcze bez wartości w MVP"
+          : "Planned sources — no values in the MVP yet"
+      }
+    </h2><p>
+      <a
+        href="https://rplumber.ilo.org/data/indicator/?id=EMP_TEMP_SEX_INS_NB_A&ref_area=POL"
+        >ILOSTAT EMP_TEMP_SEX_INS_NB_A</a
+      > — {
+        pl
+          ? "endpoint zweryfikowany; przed integracją wymagane rozwiązanie kodów źródeł i not oraz sprawdzenie zakresu publicznej własności."
+          : "endpoint verified; source and note codes and the scope of public ownership must be reviewed before integration."
+      }
+    </p><p>
+      <a
+        href="https://bdl.stat.gov.pl/api/v1/variables?subject-id=P1967&format=json"
+        >GUS BDL</a
+      > — {
+        pl
+          ? "kandydat do danych krajowych. Klasyfikacja własności nie dowodzi finansowania wyłącznie z podatków."
+          : "candidate for national data. Ownership classification does not establish exclusive tax financing."
+      }
+    </p><h2>{pl ? "Aktualizacje i licencje" : "Updates and licences"}</h2><p>
+      {
+        pl
+          ? "GitHub Actions co tydzień pobiera dane, waliduje schemat, kompletność stron API oraz spójność obserwacji i otwiera pull request do przeglądu. Build strony używa zatwierdzonego snapshotu, bez zależności od dostępności API. Zmiana snapshotu zachowuje historię w Git."
+          : "GitHub Actions retrieves data weekly, validates the schema, API pagination and observation consistency, and opens a pull request for review. The site builds from the approved snapshot without requiring live APIs. Git retains snapshot history."
+      }
+    </p><p>
+      {
+        pl
+          ? "Kod aplikacji jest dostępny na licencji MIT. Dane zachowują licencje dostawców, wskazane osobno dla każdego źródła. Granice mapy Natural Earth są w domenie publicznej; ich prezentacja nie wyraża stanowiska w sprawie statusu terytoriów."
+          : "Application code is MIT-licensed. Data retains the provider licences specified for each source. Natural Earth map boundaries are public domain; their display does not imply a position on territorial status."
+      }
+    </p><p>
+      <a href="https://github.com/Adkins1/global-public-sector-atlas"
+        >{
+          pl
+            ? "Kod, architektura i zgłaszanie błędów →"
+            : "Code, architecture and issue reporting →"
+        }</a>
+    </p>
+  </main></Layout
+>

@@ -1,0 +1,41 @@
+name: Refresh official data
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: pip install -r requirements.txt
+      - run: python -m etl.pipeline --refresh
+      - run: python -m pytest -q
+      - run: npm ci && npm run check && npm run build
+      - name: Propose reviewed data release
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/data-refresh
+          commit-message: "data: refresh validated official snapshots"
+          title: "data: refresh official sources"
+          body: |
+            Official API snapshots refreshed; schema, units, pagination, raw checksums and derived-value lineage validated.
+
+            Review changes in coverage and definitions before merging. Null values remain missing. No automatic merge.
+          add-paths: |
+            data/
+            public/data/

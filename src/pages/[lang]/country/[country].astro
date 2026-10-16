@@ -1,0 +1,100 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import rows from "../../../../public/data/atlas.json";
+import catalog from "../../../../public/data/catalog.json";
+export function getStaticPaths() {
+  const countries = [
+    ...new Set(rows.filter((r) => r.value !== null).map((r) => r.country)),
+  ];
+  return ["pl", "en"].flatMap((lang) =>
+    countries.map((country) => ({
+      params: { lang, country: country.toLowerCase() },
+      props: { code: country },
+    })),
+  );
+}
+const lang = Astro.params.lang as "pl" | "en";
+const pl = lang === "pl";
+const { code } = Astro.props;
+const country = catalog.countries.find((c) => c.iso3 === code)!;
+const name = new Intl.DisplayNames([lang], { type: "region" }).of(country.iso2);
+const records = rows
+  .filter((r) => r.country === code && r.sector === "TOTAL")
+  .sort((a, b) => b.year - a.year || a.indicator.localeCompare(b.indicator));
+const labels: Record<string, string> = {
+  government_employment_share: pl
+    ? "Zatrudnienie S.13 (% ogółu)"
+    : "S.13 employment (% total)",
+  government_per_1000: pl
+    ? "Pracownicy S.13 na 1000 mieszkańców"
+    : "S.13 employees per 1,000 residents",
+  compensation_gdp: pl
+    ? "Koszty wynagrodzeń S.13 (% PKB)"
+    : "S.13 compensation (% GDP)",
+  public_employment_share: pl
+    ? "Zatrudnienie publiczne WWBI (% ogółu, zakres niezweryfikowany)"
+    : "WWBI public employment (% total, unverified scope)",
+};
+---
+
+<Layout lang={lang} title={`${name} · Global Public Sector Atlas`}
+  ><main class="prose">
+    <div class="eyebrow">COUNTRY PROFILE / {code}</div><h1>{name}</h1><p>
+      {
+        pl
+          ? "Roczne dane wraz z jednostką, zakresem i źródłem. Nie traktuj szeregu WWBI jako kontynuacji OECD."
+          : "Annual data with units, scope and sources. Do not treat the WWBI series as a continuation of OECD."
+      }
+    </p><p>
+      <a
+        href={`/${lang}/?countries=${code}&metric=government_employment_share&year=2023`}
+        >{
+          pl ? "Otwórz interaktywny profil →" : "Open interactive profile →"
+        }</a>
+    </p><div class="table-scroll">
+      <table>
+        <thead
+          ><tr
+            ><th>{pl ? "Rok" : "Year"}</th><th
+              >{pl ? "Wskaźnik" : "Indicator"}</th
+            ><th>{pl ? "Wartość" : "Value"}</th><th
+              >{pl ? "Źródło / flaga" : "Source / flag"}</th
+            ></tr
+          ></thead
+        ><tbody
+          >{
+            records.map((r) => (
+              <tr>
+                <>
+                  <td>{r.year}</td>
+                  <td>{labels[r.indicator]}</td>
+                  <td>
+                    {r.value === null
+                      ? "—"
+                      : r.value.toLocaleString(lang, {
+                          maximumFractionDigits: 2,
+                        })}
+                  </td>
+                  <td>
+                    <a href={(catalog.sources as any)[r.source_id].url}>
+                      {r.source_id} ↗
+                    </a>{" "}
+                    {r.source_flags}
+                  </td>
+                </>
+              </tr>
+            ))
+          }</tbody>
+      </table>
+    </div><p>
+      <a href="/data/observations.json"
+        >{
+          pl
+            ? "Pełne definicje i metadane wartości (JSON)"
+            : "Full definitions and observation metadata (JSON)"
+        }</a
+      > · <a href={`/${lang}/methodology/`}
+        >{pl ? "Metodologia" : "Methodology"}</a>
+    </p>
+  </main></Layout
+>
