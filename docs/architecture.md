@@ -39,7 +39,7 @@ Brak rekordu oznacza brak obserwacji w zaimportowanym zakresie, a nie dowód nie
 
 ## Automatyzacja
 
-`sync-data.yml`: w poniedziałki 05:23 UTC (07:23 Europe/Warsaw latem, 06:23 zimą), retry/backoff, paginacja WWBI `skip`, walidacja, przeliczenie, PR do przeglądu. Nie ma automatycznego merge. Błąd API przerywa aktualizację; wersja opublikowana pozostaje dostępna. Snapshoty i metadane są wersjonowane w Git.
+`sync-data.yml`: w poniedziałki 05:23 UTC (07:23 Europe/Warsaw latem, 06:23 zimą), retry/backoff, paginacja WWBI `skip`, walidacja, przeliczenie, osobna gałąź propozycji z linkiem do utworzenia PR. Nie ma automatycznego merge. Błąd API przerywa aktualizację; wersja opublikowana pozostaje dostępna. Snapshoty i metadane są wersjonowane w Git.
 
 `ci.yml`: odtworzenie z zamrożonych danych, testy Python, kontrola diff, TypeScript/Astro, build, Playwright, artifact statyczny. Main może być wdrażany na Pages, jeśli repo ma dwa sekrety Cloudflare. PR nie dostaje sekretów wdrożeniowych.
 

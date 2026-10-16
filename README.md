@@ -29,7 +29,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Build jest statyczny (`dist/`) i nie wymaga działających API. Odświeżenie z sieci: `python -m etl.pipeline --refresh`. Przed publikacją przejrzyj różnice definicji, pokrycia i rewizji. Dane zaktualizowane automatycznie trafiają do PR.
+Build jest statyczny (`dist/`) i nie wymaga działających API. Odświeżenie z sieci: `python -m etl.pipeline --refresh`. Przed publikacją przejrzyj różnice definicji, pokrycia i rewizji. Dane zaktualizowane automatycznie trafiają do osobnej gałęzi; podsumowanie workflow zawiera link do otwarcia PR.
 
 ## Dostępne funkcje
 

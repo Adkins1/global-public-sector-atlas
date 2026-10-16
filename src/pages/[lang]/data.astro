@@ -31,24 +31,28 @@ const pl = lang === "pl";
     </p><ul>
       <li>
         <a href="/data/observations.csv" download
-          >CSV — {pl ? "wartości i metadane" : "values and metadata"}</a>
+          >CSV — {pl ? "wartości i metadane" : "values and metadata"}</a
+        >
       </li><li>
         <a href="/data/observations.json" download
           >JSON — {
             pl
               ? "pełny zbiór i powiązania obserwacji"
               : "complete dataset and observation lineage"
-          }</a>
+          }</a
+        >
       </li><li>
         <a href="/data/catalog.json" download
           >{
             pl
               ? "Katalog źródeł, krajów i licencji"
               : "Source, country and licence catalogue"
-          } (JSON)</a>
+          } (JSON)</a
+        >
       </li><li>
         <a href="/data/provenance.json" download
-          >SHA-256 / {pl ? "daty pobrania" : "retrieval timestamps"}</a>
+          >SHA-256 / {pl ? "daty pobrania" : "retrieval timestamps"}</a
+        >
       </li><li>
         <a
           href="https://github.com/Adkins1/global-public-sector-atlas/tree/main/data/observations"
@@ -56,11 +60,13 @@ const pl = lang === "pl";
             pl
               ? "Repozytorium: kraj → rok → wskaźnik"
               : "Repository: country → year → indicator"
-          }</a>
+          }</a
+        >
       </li><li>
         <a
           href="https://github.com/Adkins1/global-public-sector-atlas/blob/main/data/observation.schema.json"
-          >JSON Schema</a>
+          >JSON Schema</a
+        >
       </li>
     </ul><h2>{pl ? "Aktywne źródła" : "Active sources"}</h2>{
       Object.entries(catalog.sources).map(([, s]) => (
@@ -115,8 +121,8 @@ const pl = lang === "pl";
     </p><h2>{pl ? "Aktualizacje i licencje" : "Updates and licences"}</h2><p>
       {
         pl
-          ? "GitHub Actions co tydzień pobiera dane, waliduje schemat, kompletność stron API oraz spójność obserwacji i otwiera pull request do przeglądu. Build strony używa zatwierdzonego snapshotu, bez zależności od dostępności API. Zmiana snapshotu zachowuje historię w Git."
-          : "GitHub Actions retrieves data weekly, validates the schema, API pagination and observation consistency, and opens a pull request for review. The site builds from the approved snapshot without requiring live APIs. Git retains snapshot history."
+          ? "GitHub Actions co tydzień pobiera dane, waliduje schemat, kompletność stron API oraz spójność obserwacji i publikuje osobną gałąź z linkiem do przeglądu zmian. Build strony używa zatwierdzonego snapshotu, bez zależności od dostępności API. Zmiana snapshotu zachowuje historię w Git."
+          : "GitHub Actions retrieves data weekly, validates the schema, API pagination and observation consistency, and publishes a separate branch with a link to review the changes. The site builds from the approved snapshot without requiring live APIs. Git retains snapshot history."
       }
     </p><p>
       {
@@ -130,7 +136,8 @@ const pl = lang === "pl";
           pl
             ? "Kod, architektura i zgłaszanie błędów →"
             : "Code, architecture and issue reporting →"
-        }</a>
+        }</a
+      >
     </p>
   </main></Layout
 >

@@ -16,7 +16,7 @@ Rollback: wybierz poprzedni deployment w Pages. Dane i kod można odtworzyć z o
 
 ## Synchronizacja
 
-Workflow `Refresh official data` tworzy PR z odświeżeniem snapshotów. W repo Settings → Actions → General musi być dozwolone tworzenie pull requestów przez GitHub Actions. PR wymaga przeglądu danych przed merge. Tygodniowy cron to 05:23 UTC w poniedziałki.
+Workflow `Refresh official data` publikuje osobną gałąź `automation/data-refresh-<run_id>` i link do porównania z main. Użytkownik może z tego linku otworzyć PR. Bot nie ma uprawnienia do zatwierdzania PR; ustawienie repozytorium pozostało wyłączone. Zmiany wymagają przeglądu przed merge. Tygodniowy cron to 05:23 UTC w poniedziałki.
 
 ## Stan przy pierwszym przygotowaniu
 

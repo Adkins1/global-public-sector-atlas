@@ -5,7 +5,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
-  pull-requests: write
 concurrency:
   group: data-refresh
   cancel-in-progress: false
@@ -26,16 +25,17 @@ jobs:
       - run: python -m etl.pipeline --refresh
       - run: python -m pytest -q
       - run: npm ci && npm run check && npm run build
-      - name: Propose reviewed data release
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: automation/data-refresh
-          commit-message: "data: refresh validated official snapshots"
-          title: "data: refresh official sources"
-          body: |
-            Official API snapshots refreshed; schema, units, pagination, raw checksums and derived-value lineage validated.
-
-            Review changes in coverage and definitions before merging. Null values remain missing. No automatic merge.
-          add-paths: |
-            data/
-            public/data/
+      - name: Publish a data proposal branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ public/data/
+          if git diff --cached --quiet; then
+            echo "No data changes." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="automation/data-refresh-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git commit --quiet -m "data: refresh validated official snapshots"
+          git push origin "$branch"
+          printf 'Validated data proposal: https://github.com/%s/compare/main...%s?expand=1\n' "$GITHUB_REPOSITORY" "$branch" >> "$GITHUB_STEP_SUMMARY"
