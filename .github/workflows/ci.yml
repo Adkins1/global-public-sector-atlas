@@ -37,6 +37,12 @@ jobs:
         with:
           name: atlas-static-site
           path: dist
+      - name: Ensure Cloudflare Pages project
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.HAS_CF_SECRET == 'true'
+        run: node scripts/cloudflare-setup.mjs project
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - name: Deploy approved main to Cloudflare Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.HAS_CF_SECRET == 'true'
         uses: cloudflare/wrangler-action@v3
@@ -46,3 +52,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=global-public-sector-atlas --branch=main
+      - name: Attach atlas.kawka.pro
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.HAS_CF_SECRET == 'true'
+        run: node scripts/cloudflare-setup.mjs domain
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

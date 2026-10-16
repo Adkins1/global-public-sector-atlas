@@ -4,12 +4,13 @@ Projekt jest statyczny: `npm ci && npm run build`, katalog wynikowy `dist`. Dome
 
 ## Wdrożenie przez GitHub Actions
 
-1. W koncie Cloudflare zawierającym `kawka.pro` utwórz projekt Pages `global-public-sector-atlas` (Direct Upload). Nie jest potrzebny adapter SSR.
-2. Token API musi mieć **Account → Cloudflare Pages → Edit**, ograniczone do właściwego konta. Do przypięcia DNS wymagane jest osobno Zone → DNS → Edit dla `kawka.pro`. Nie używaj Global API Key.
-3. Ustaw sekrety GitHub repo: `CLOUDFLARE_API_TOKEN` i `CLOUDFLARE_ACCOUNT_ID`. Wprowadzaj wartości w ustawieniach GitHub lub z lokalnego menedżera sekretów; nigdy w pliku repozytorium ani w rozmowie.
-4. Uruchom `Validate and build` na `main`. Po testach workflow publikuje `dist` na Pages. Gdy token nie jest ustawiony, build i artifact działają, a deploy jest pomijany.
-5. W Pages → Custom domains dodaj `atlas.kawka.pro`, a następnie odpowiedni rekord CNAME do przydzielonej domeny `*.pages.dev`. Najpierw przypnij domenę w Pages, potem DNS. Nie zastępuj istniejącego rekordu bez sprawdzenia.
-6. Sprawdź HTTPS, `/pl/`, `/en/`, `/data/observations.csv`, `sitemap-index.xml` oraz nagłówki z `_headers`.
+1. Utwórz dedykowany token Cloudflare: **Account → Cloudflare Pages → Edit** dla konta zawierającego `kawka.pro`, a także **Zone → Zone → Read** i **Zone → DNS → Edit** wyłącznie dla strefy `kawka.pro`. Nie używaj Global API Key.
+2. Zapisz token jako sekret repozytorium **CLOUDFLARE_API_TOKEN**. `CLOUDFLARE_ACCOUNT_ID` został już ustawiony. Wprowadzaj sekret w ustawieniach GitHub lub z lokalnego menedżera sekretów; nigdy w pliku repozytorium ani w rozmowie.
+3. Uruchom workflow **Validate and build** na `main`. Po testach skrypt `scripts/cloudflare-setup.mjs project` utworzy projekt Pages `global-public-sector-atlas`, jeżeli jeszcze nie istnieje. Następnie Wrangler opublikuje `dist`.
+4. Krok `domain` przypnie `atlas.kawka.pro` do Pages, a potem doda CNAME do rzeczywistej domeny projektu `*.pages.dev`. Istniejący konflikt DNS przerywa operację; skrypt nie nadpisuje rekordów. Aktywacja domeny i TLS może potrwać.
+5. Sprawdź HTTPS, `/pl/`, `/en/`, `/data/observations.csv`, `sitemap-index.xml` oraz nagłówki z `_headers`. Sam poprawny build nie potwierdza wdrożenia.
+
+Gdy token nie jest ustawiony, build i artifact działają, a wszystkie kroki wdrożenia są pomijane. Kod przygotowania Pages sprawdzono składniowo i względem oficjalnego API, ale nie wykonano operacji tworzenia przy obecnym tokenie (HTTP 403).
 
 Rollback: wybierz poprzedni deployment w Pages. Dane i kod można odtworzyć z odpowiadającego commita Git.
 
